@@ -1,4 +1,4 @@
-# Building Firmware and Driver for Raspberry Pi 4 using NXP Open-Source Repository
+# Building host--based modules driver for Raspberry Pi 4 using NXP Open-Source Repository
 
 This README file provides instructions on building and deploying firmware and drivers for various NXP chipsets on a Raspberry Pi 4. It supports multiple u-blox modules with different host interfaces for Wi-Fi and Bluetooth.
 
@@ -16,6 +16,7 @@ This README file provides instructions on building and deploying firmware and dr
 
 ## Prerequisites
 
+- Set up a Raspberry Pi with the latest image. 
 - Set up a cross-toolchain for the target system.
 - Ensure configured kernel sources are available and prepared for building external kernel modules.
 - Enable `CONFIG_CFG80211` in the kernel `.config`.
@@ -38,7 +39,6 @@ This README file provides instructions on building and deploying firmware and dr
 
 4. **Initial Setup:**
    - Insert the microSD card into your Raspberry Pi 4 and power it on.
-   - Follow the on-screen instructions to complete the initial setup, including configuring your network and creating a user account.
 
 ## Setting Up the Development Environment
 
@@ -82,7 +82,7 @@ This README file provides instructions on building and deploying firmware and dr
 
    - The build results will be located in `../bin_wlan/` and include `mlan.ko` and `moal.ko`.
 
-   > Note: `mlanutl` is not included since `lf-5.15.71-2.2.0`.
+   **Note:** `mlanutl` is not included since `lf-5.15.71-2.2.0`.
 
 ## Downloading Firmware
 
