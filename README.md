@@ -1,6 +1,6 @@
 # Building host--based modules driver for Raspberry Pi 4 using NXP Open-Source Repository
 
-This README file provides instructions on building and deploying firmware and drivers for various NXP chipsets on a Raspberry Pi 4. It supports multiple u-blox modules with different host interfaces for Wi-Fi and Bluetooth.
+This README file provides instructions on building and deploying firmware and drivers for various NXP chipsets on a Raspberry Pi 4.
 
 ## Supported u-blox Modules and Chipsets
 
@@ -16,29 +16,99 @@ This README file provides instructions on building and deploying firmware and dr
 
 ## Prerequisites
 
+### Hardware
+- Raspberry Pi (3/4/4b/5) host board. [Link](https://www.raspberrypi.com/products/)
+- USB Flash Drive / SD card with USB SD card reader (32GB or more)
+- u-blox module EVK kit 
+- power cable USB -C type cable [Link](https://www.raspberrypi.com/products/)
+- USB to TTL serial cable [Link](https://www.reichelt.de/de/de/raspberry-pi-usb-zu-ttl-0-9-m-pl2303hx-rpi-usb-ttl-p150567.html?PROVID=2788&gad_source=1&gclid=EAIaIQobChMI183FjY7-hgMVd5xQBh1dbg6uEAQYASABEgJBOPD_BwE&&r=1)
+
+### Software
 - Set up a Raspberry Pi with the latest image. 
-- Set up a cross-toolchain for the target system.
-- Ensure configured kernel sources are available and prepared for building external kernel modules.
-- Enable `CONFIG_CFG80211` in the kernel `.config`.
-- Prepare fresh kernel sources, configure the kernel, and run `make modules_prepare`.
+- Set up a cross-toolchain 
+  
 
 ## Downloading and Flashing the Raspberry Pi OS
 
 1. **Download Raspberry Pi OS (64-bit):**
    - Go to the [Raspberry Pi website](https://www.raspberrypi.org/software/operating-systems/) and download the Raspberry Pi OS (64-bit) with desktop or Raspberry Pi OS Lite (64-bit) if you prefer a minimal version.
 
-2. **Prepare the microSD Card:**
+2. **Prepare the microSD Card/USB driver:**
    - Use a tool like [Raspberry Pi Imager](https://www.raspberrypi.org/software/) or [balenaEtcher](https://www.balena.io/etcher/) to write the Raspberry Pi OS image to your microSD card.
 
 3. **Flashing the Image:**
-   - Insert the microSD card into your computer.
+   - Insert the microSD/USB drive card into your computer.
    - Open the Raspberry Pi Imager or balenaEtcher.
    - Select the Raspberry Pi OS image.
    - Choose the microSD card as the target.
    - Click "Write" and wait for the process to complete.
 
 4. **Initial Setup:**
-   - Insert the microSD card into your Raspberry Pi 4 and power it on.
+   - To enable the serial console, re-insert the prepared image microSD/USB drive open `bootfs` drive, and update the `config.txt` file by adding this parameter `enable_uart=1`
+ ```bash
+# For more options and information see
+# http://rptl.io/configtxt
+# Some settings may impact device functionality. See link above for details
+
+# Uncomment some or all of these to enable the optional hardware interfaces
+#dtparam=i2c_arm=on
+#dtparam=i2s=on
+#dtparam=spi=on
+
+# Enable audio (loads snd_bcm2835)
+dtparam=audio=on
+
+# Additional overlays and parameters are documented
+# /boot/firmware/overlays/README
+
+# Automatically load overlays for detected cameras
+camera_auto_detect=1
+
+# Automatically load overlays for detected DSI displays
+display_auto_detect=1
+
+# Automatically load initramfs files, if found
+auto_initramfs=1
+
+# Enable DRM VC4 V3D driver
+dtoverlay=vc4-kms-v3d
+max_framebuffers=2
+
+# Don't have the firmware create an initial video= setting in cmdline.txt.
+# Use the kernel's default instead.
+disable_fw_kms_setup=1
+
+# Run in 64-bit mode
+arm_64bit=1
+
+# Disable compensation for displays with overscan
+disable_overscan=1
+
+# Run as fast as firmware / board allows
+arm_boost=1
+
+[cm4]
+# Enable host mode on the 2711 built-in XHCI USB controller.
+# This line should be removed if the legacy DWC2 controller is required
+# (e.g. for USB device mode) or if USB support is not required.
+otg_mode=1
+
+enable_uart=1
+
+[all]
+
+```
+   - Connect the UART pins on the Raspberry Pi to the USB TTL converter on the PC. Then, open [Tera Term](https://teratermproject.github.io/index-en.html) or any serial terminal tool using the COM port associated with the Raspberry Pi.
+     
+   - ![Connection Diagram](img/rpi_usb)
+
+   - Insert the microSD/USB drive into Raspberry Pi 4's USB port  and power it on. ( See image)
+
+
+   - connect the u-blox module over the SD card slot
+     
+   - ![Connection Diagram](img/rpi4.jpeg)
+
 
 ## Setting Up the Development Environment
 
