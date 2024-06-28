@@ -100,7 +100,7 @@ enable_uart=1
 ```
    - Connect the UART pins on the Raspberry Pi to the USB TTL converter on the PC. Then, open [Tera Term](https://teratermproject.github.io/index-en.html) or any serial terminal tool using the COM port associated with the Raspberry Pi.
      
-   - ![Connection Diagram](img/rpi_usb)
+   - ![Connection Diagram](img/rpi_usb.png)
 
    - Insert the microSD/USB drive into Raspberry Pi 4's USB port  and power it on. ( See image)
 
